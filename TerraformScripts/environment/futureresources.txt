@@ -1,0 +1,20 @@
+###Enable update management
+
+
+resource "azurerm_log_analytics_solution" "update_management" {
+  solution_name = "UpdateManagement"
+  location      = azurerm_automation_account.example.location
+  resource_group_name = azurerm_automation_account.example.resource_group_name
+  workspace_id  = azurerm_log_analytics_workspace.example.id
+  workspace_name = azurerm_log_analytics_workspace.example.name
+
+  plan {
+    publisher = "Microsoft"
+    product   = "OMSGallery/UpdateManagement"
+    name      = "UpdateManagement"
+  }
+
+  parameters = {
+    automationAccountId = azurerm_automation_account.example.id
+  }
+}

@@ -1,0 +1,57 @@
+<#	
+	Version:        1.0
+	Author:         Ahmad Majeed Zahoory
+	Creation Date:  4th November, 2019
+	Purpose/Change: Assign Public IP Address
+#>
+
+
+# Defined variables
+$ResourceGroupName = "RG-301-M03-02-R2"
+$VMName1 = "PR-DB-SRV"
+$VMName2 = "PR-Web-SRV"
+
+#################### Assign Public IP Address to DB Server ##############################################
+
+# Retrieve the First Virtual Machine details
+$VM1 = Get-AzVM -ResourceGroupName $ResourceGroupName -Name $VMName1 
+$Location1 = $VM1.Location
+$NICId1 = $VM1.NetworkProfile.NetworkInterfaces.Id 
+$NICResource1 = Get-AzResource -ResourceId $NICId1
+
+# Retrive the NIC Object of First Virtual Machine
+$NIC1 = Get-AzNetworkInterface -Name $NICResource1.Name -ResourceGroupName $NICResource1.ResourceGroupName
+$NICIPConfigName1= $NIC1.ipConfigurations[0].Name 
+$NICSubnetId1 = $NIC1.ipConfigurations[0].subnet.id 
+
+# Create a Public IP address for First Virtual Machine
+$PublicIP1 = New-AzPublicIpAddress -ResourceGroupName $ResourceGroupName -Location $Location1 -Name "$VMName1-pip" -AllocationMethod Dynamic -IdleTimeoutInMinutes 4
+ 
+# Assign the Public IP address to the First Virtual Machine
+$NIC1 | Set-AzNetworkInterfaceIpConfig -Name $NICIPConfigName1 -SubnetId $NICSubnetId1 -PublicIpAddressId $PublicIP1.Id | Set-AzNetworkInterface
+
+
+#################### Assign Public IP Address to DB Server ##############################################
+
+# Retrieve the Second Virtual Machine details
+$VM2 = Get-AzVM -ResourceGroupName $ResourceGroupName -Name $VMName2 
+$Location2 = $VM2.Location
+$NICId2 = $VM2.NetworkProfile.NetworkInterfaces.Id 
+$NICResource2 = Get-AzResource -ResourceId $NICId2
+
+# Retrive the NIC Object of Second Virtual Machine
+$NIC2 = Get-AzNetworkInterface -Name $NICResource2.Name -ResourceGroupName $NICResource2.ResourceGroupName
+$NICIPConfigName2= $NIC2.ipConfigurations[0].Name 
+$NICSubnetId2 = $NIC2.ipConfigurations[0].subnet.id 
+ 
+# Create a Public IP address for of Second Virtual Machine
+$PublicIP2 = New-AzPublicIpAddress -ResourceGroupName $ResourceGroupName -Location $Location2 -Name "$VMName2-pip" -AllocationMethod Dynamic -IdleTimeoutInMinutes 4
+ 
+# Assign the Public IP address to the of Second Virtual Machine
+$NIC2 | Set-AzNetworkInterfaceIpConfig -Name $NICIPConfigName2 -SubnetId $NICSubnetId2 -PublicIpAddressId $PublicIP2.Id | Set-AzNetworkInterface
+ 
+
+#End
+
+
+

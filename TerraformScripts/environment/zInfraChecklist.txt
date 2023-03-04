@@ -1,0 +1,69 @@
+Requirements
+-Source VM network
+-Destination VM network
+-Source Virtual Machines
+-Source Storage account
+-Cache Storage Account
+
+
+Components of Site Recovery Services
+-Object in the vault that represents the azure region where vms are protected
+-Only one fabric object can be created per region.
+-If enabled replication from portal, it gets created automatically
+-You cant create new one if already exist
+
+Protection Container
+-Container used to group replicated items within a Fabric (Primary Conatiner & Recovery Container)
+
+
+Proctection Container Mapping
+-Maps the Primary Proctection Conatiner with a recovery Protection Container
+-For reverse replication the roles of the original region and the recovery region
+ switch. The original region now becomes a new recovery region and viceversa
+
+Cache Storage account
+-Holds replication changes temporarily
+-Azure creates one storage cache if not create by You
+
+Network Mapping
+-This maps primary region vnet to disaster recovery vnet in secondary region
+
+
+************************************************************************************
+Infra for primary region: 
+-Resource Group primary √ 
+       name = testvnet
+       location = West Us 3
+-Azure Virtual network primary √
+-Azure subnets Virtual network primary √
+-Azure Virtual Machines Primary √
+-Azure Network Interface card √
+-Primary ublic Ip √
+-Network security group √
+-Azure recovery service vault 
+-Azure site recovery fabric primary 
+-Azure Site recovery protection Container primary
+-Replication policy
+-Azure site recovery protection Conatiner Mapping
+-Azure site recovery network mapping
+-Storage account primary
+-Azure replication task to automate replication
+-Azure Automation Account to run runbooks
+        This runbook prompts the user to enter the source and target resource group names, 
+        source and target virtual machine names, and performs the following steps:
+
+        -Connects to Azure
+        -Gets the source and target virtual machines
+        -Checks if the source and target virtual machines exist
+        -Gets the source and target virtual networks
+        -Replicates the virtual machine
+        -Checks the replication status
+         Note: This is just an example and you may need to modify it to match your specific requirements.
+-------------------------------------------------------------------------------------------------------
+Infra for secondary region:
+-Resource Group secondary
+-Azure Virtual network secondary
+-Azure subnets Virtual network secondary
+-Recovery fabric secondary
+-Site recovery proctection Container
+-Public IP secondary

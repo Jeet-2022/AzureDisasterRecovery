@@ -1,0 +1,19 @@
+
+#ignoring all the POC documents
+/Team-HLD Documents/
+
+#ignoring all the .terraform temporary files 
+/TerraformScripts/environment/.terraform
+/TerraformScripts/environment/provider.tf
+
+#ignoring all the lock files
+.terraform.lock.hcl
+desktop.ini
+
+#All the service vault .terraform files
+/TerraformScripts/service vault/.terraform
+/TerraformScripts/service vault/provider.tf
+
+
+#Lab manual
+Manual_LAB-301-M02-03_Azure Disaster Recovery.pdf
